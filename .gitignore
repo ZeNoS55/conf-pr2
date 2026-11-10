@@ -1,0 +1,33 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Generated graphs and binary files
+*.png
+*.jpg
+*.jpeg
+*.svg
+*.pdf
+*.zip
+*.tar
+*.tar.gz
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+bin/
+obj/
+_backup/
