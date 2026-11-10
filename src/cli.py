@@ -94,6 +94,7 @@ def parse_arguments(args: Optional[List[str]] = None) -> Config:
         max_depth=parsed.max_depth,
         filter_substring=parsed.filter_substring,
         stage=parsed.stage,
+        no_gui=parsed.no_gui,
     )
     validate_config(cfg)
     return cfg

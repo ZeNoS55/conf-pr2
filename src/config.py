@@ -22,6 +22,7 @@ class Config:
     max_depth: int
     filter_substring: str
     stage: Optional[int] = None
+    no_gui: bool = False
 
 
 def validate_package_name(name: str, test_mode: bool) -> None:

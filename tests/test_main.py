@@ -5,6 +5,7 @@ from unittest.mock import MagicMock, patch
 from src.main import main
 
 EXIT_SUCCESS = 0
+EXIT_FAILURE = 1
 
 
 class TestMainCli(unittest.TestCase):
@@ -87,6 +88,21 @@ class TestMainCli(unittest.TestCase):
             ]
         )
         self.assertEqual(code, EXIT_SUCCESS)
+
+    def test_main_validation_error(self) -> None:
+        """Test that invalid config causes main to return error code."""
+        code = main(
+            [
+                "--package",
+                "A",
+                "--repo",
+                "test_repos/diamond.json",
+                "--test-mode",
+                "--max-depth",
+                "-2",
+            ]
+        )
+        self.assertEqual(code, EXIT_FAILURE)
 
 
 if __name__ == "__main__":

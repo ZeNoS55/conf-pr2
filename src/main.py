@@ -19,6 +19,8 @@ STAGE_3 = 3
 STAGE_4 = 4
 STAGE_5 = 5
 EMPTY_COUNT = 0
+EXIT_SUCCESS = 0
+EXIT_FAILURE = 1
 DEFAULT_OUTPUT_IMAGE = "dependency_graph.png"
 
 
@@ -104,19 +106,8 @@ def run_stage5(
         print("\nPlantUML online rendering unavailable (offline fallback).")
 
 
-def main(argv: Optional[List[str]] = None) -> int:
-    """Main CLI entry point coordinating stage executions."""
-    parser = create_parser()
-    parsed_args = parser.parse_args(argv)
-    cfg = Config(
-        package_name=parsed_args.package_name,
-        repo=parsed_args.repo,
-        test_mode=parsed_args.test_mode,
-        max_depth=parsed_args.max_depth,
-        filter_substring=parsed_args.filter_substring,
-        stage=parsed_args.stage,
-    )
-
+def execute_stage(cfg: Config) -> None:
+    """Dispatch pipeline execution based on configured stage."""
     stage = cfg.stage
     if stage == STAGE_1:
         run_stage1(cfg)
@@ -133,9 +124,24 @@ def main(argv: Optional[List[str]] = None) -> int:
         print()
         run_stage4(cfg, graph=graph)
         print()
-        run_stage5(cfg, no_gui=parsed_args.no_gui, graph=graph)
+        run_stage5(cfg, no_gui=cfg.no_gui, graph=graph)
 
-    return 0
+
+def main(argv: Optional[List[str]] = None) -> int:
+    """Main CLI entry point coordinating stage executions."""
+    try:
+        cfg = parse_arguments(argv)
+    except ValueError as err:
+        print(f"Configuration Error: {err}", file=sys.stderr)
+        return EXIT_FAILURE
+
+    try:
+        execute_stage(cfg)
+    except RuntimeError as err:
+        print(f"Runtime Error: {err}", file=sys.stderr)
+        return EXIT_FAILURE
+
+    return EXIT_SUCCESS
 
 
 if __name__ == "__main__":
